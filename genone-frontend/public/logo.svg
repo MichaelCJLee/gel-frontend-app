@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <style>
+      .logo-path {
+        fill: none;
+        stroke: #000000;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .logo-fill {
+        fill: #000000;
+      }
+    </style>
+  </defs>
+  
+  <!-- Main circular brushstroke -->
+  <path class="logo-path" d="M 40 100 
+    Q 40 40, 100 40
+    Q 160 40, 160 100
+    Q 160 160, 100 160
+    Q 40 160, 40 100 Z" 
+    stroke-width="12" 
+    fill="none"/>
+  
+  <!-- Organic flowing elements at the top -->
+  <g class="logo-fill">
+    <!-- Main flowing element -->
+    <path d="M 140 60
+      C 150 50, 160 45, 170 50
+      C 175 55, 180 60, 175 65
+      C 170 70, 165 75, 160 70
+      C 155 65, 150 60, 145 65
+      C 140 70, 135 75, 140 60 Z"/>
+    
+    <!-- Smaller flowing elements -->
+    <path d="M 155 45
+      C 160 40, 165 38, 170 42
+      C 172 45, 170 48, 167 47
+      C 164 46, 161 44, 158 46
+      C 155 48, 153 47, 155 45 Z"/>
+    
+    <path d="M 165 35
+      C 168 32, 172 30, 175 33
+      C 177 36, 175 38, 172 37
+      C 169 36, 167 34, 165 35 Z"/>
+    
+    <!-- Additional organic elements -->
+    <path d="M 145 70
+      C 148 65, 152 63, 155 66
+      C 157 69, 155 72, 152 71
+      C 149 70, 147 68, 145 70 Z"/>
+    
+    <path d="M 175 55
+      C 178 52, 182 50, 185 53
+      C 187 56, 185 59, 182 58
+      C 179 57, 177 55, 175 55 Z"/>
+  </g>
+  
+  <!-- Additional texture elements around the circle -->
+  <g class="logo-fill">
+    <!-- Bottom right texture -->
+    <path d="M 150 140
+      C 153 138, 156 140, 158 143
+      C 160 146, 158 149, 155 148
+      C 152 147, 150 144, 150 140 Z"/>
+    
+    <!-- Left side texture -->
+    <path d="M 50 120
+      C 47 118, 45 115, 47 112
+      C 49 109, 52 111, 53 114
+      C 54 117, 52 120, 50 120 Z"/>
+  </g>
+</svg>

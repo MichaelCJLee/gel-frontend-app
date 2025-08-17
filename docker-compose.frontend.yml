@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # Frontend static file server
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - backend
+
+  # Backend API service
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Copy from your .env file
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - AZURE_DEVOPS_PAT=${AZURE_DEVOPS_PAT:-}
+      - CONFLUENCE_API_TOKEN=${CONFLUENCE_API_TOKEN:-}
+      - QDRANT_URL=${QDRANT_URL:-}
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      # Production settings
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      # Database for persistence
+      - DATABASE_URL=postgresql://agent:${POSTGRES_PASSWORD:-changeme123}@postgres:5432/business_analyst
+    volumes:
+      # Persist conversation data
+      - ./data:/app/data
+      # Mount config if needed
+      - ./.env:/app/.env:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - postgres
+
+  # PostgreSQL for production persistence
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: business_analyst
+      POSTGRES_USER: agent
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent -d business_analyst"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
