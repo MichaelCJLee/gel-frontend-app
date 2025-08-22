@@ -82,10 +82,11 @@ export class APIError extends Error {
 
 export class SessionService {
   private apiBase: string
-  
+
   constructor(apiBase: string = import.meta.env.VITE_API_BASE_URL_2 || '/api/v1') {
-    this.apiBase = apiBase
-    console.log('[SessionService] Initialized with apiBase:', apiBase)
+    // Remove trailing slash if present to ensure consistent URL construction
+    this.apiBase = apiBase.replace(/\/$/, '')
+    console.log('[SessionService] Initialized with apiBase:', this.apiBase)
   }
 
   /**

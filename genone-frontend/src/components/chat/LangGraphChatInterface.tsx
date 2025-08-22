@@ -405,8 +405,8 @@ export function LangGraphChatInterface() {
   // Test API connection function
   const testApiConnection = useCallback(async () => {
     console.log('[LangGraphChatInterface] Testing API connection...')
-    const apiBase = import.meta.env.VITE_API_BASE_URL_2 || '/api/v1'
-    
+    const apiBase = (import.meta.env.VITE_API_BASE_URL_2 || '/api/v1').replace(/\/$/, '')
+
     try {
       // Test health endpoint
       const healthResponse = await fetch(`${apiBase}/health`)
@@ -415,13 +415,13 @@ export function LangGraphChatInterface() {
         status: healthResponse.status,
         statusText: healthResponse.statusText
       })
-      
+
       if (healthResponse.ok) {
         const healthData = await healthResponse.text()
         console.log('[LangGraphChatInterface] Health data:', healthData)
       }
-      
-      // Test streaming endpoint
+
+      // Test streaming endpoint - Fixed to use consistent URL pattern
       console.log('[LangGraphChatInterface] Testing streaming endpoint...')
       const streamResponse = await fetch(`${apiBase}/chat/stream`, {
         method: 'POST',

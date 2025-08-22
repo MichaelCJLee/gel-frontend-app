@@ -7,11 +7,12 @@ import { supabase } from './supabase'
  * Now includes JWT authentication for backend integration
  */
 export class LangGraphService {
-  private baseUrl: string
+  private apiBase: string
 
-  constructor(baseUrl: string = import.meta.env.VITE_LANGGRAPH_API_URL_2 || '') {
-    this.baseUrl = baseUrl
-    console.log('[LangGraphService] Initialized with baseUrl:', baseUrl)
+  constructor(apiBase: string = import.meta.env.VITE_API_BASE_URL_2 || '/api/v1') {
+    // Remove trailing slash if present to ensure consistent URL construction
+    this.apiBase = apiBase.replace(/\/$/, '')
+    console.log('[LangGraphService] Initialized with apiBase:', this.apiBase)
   }
 
   /**
@@ -78,13 +79,13 @@ export class LangGraphService {
     }
 
     console.log('[LangGraphService] Request body:', requestBody)
-    console.log('[LangGraphService] Making authenticated request to:', `${this.baseUrl}/api/v1/chat/stream`)
+    console.log('[LangGraphService] Making authenticated request to:', `${this.apiBase}/chat/stream`)
 
     try {
       // Get authentication headers
       const headers = await this.getAuthHeaders()
 
-      const response = await fetch(`${this.baseUrl}/api/v1/chat/stream`, {
+      const response = await fetch(`${this.apiBase}/chat/stream`, {
         method: 'POST',
         headers,
         body: JSON.stringify(requestBody),
@@ -617,9 +618,9 @@ export class LangGraphService {
       formData.append('use_persistent_memory', 'true')
       formData.append('include_metadata', 'true')
 
-      console.log('[LangGraphService] Making file upload request to:', `${this.baseUrl}/api/v1/chat/with-files`)
+      console.log('[LangGraphService] Making file upload request to:', `${this.apiBase}/chat/with-files`)
 
-      const response = await fetch(`${this.baseUrl}/api/v1/chat/with-files`, {
+      const response = await fetch(`${this.apiBase}/chat/with-files`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
@@ -773,9 +774,9 @@ export class LangGraphService {
    * Health endpoint doesn't require authentication
    */
   async testConnection(): Promise<boolean> {
-    console.log('[LangGraphService] Testing connection to:', `${this.baseUrl}/api/v1/health`)
+    console.log('[LangGraphService] Testing connection to:', `${this.apiBase}/health`)
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/health`, {
+      const response = await fetch(`${this.apiBase}/health`, {
         method: 'GET',
       })
       console.log('[LangGraphService] Connection test result:', response.ok)
@@ -793,7 +794,7 @@ export class LangGraphService {
     console.log('[LangGraphService] Testing authenticated connection')
     try {
       const headers = await this.getAuthHeaders()
-      const response = await fetch(`${this.baseUrl}/api/v1/health`, {
+      const response = await fetch(`${this.apiBase}/health`, {
         method: 'GET',
         headers,
       })
